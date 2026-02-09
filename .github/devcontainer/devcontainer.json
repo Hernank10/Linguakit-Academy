@@ -1,0 +1,9 @@
+{
+    "name": "Linguakit Academy",
+    "build": { "dockerfile": "Dockerfile" },
+    "customizations": {
+        "vscode": {
+            "extensions": ["ms-python.python", "ms-python.vscode-pylance"]
+        }
+    }
+}
