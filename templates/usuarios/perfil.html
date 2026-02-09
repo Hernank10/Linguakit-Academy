@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Panel de Estudiante: {{ user.username }}</h2>
+    <hr>
+    <div class="row">
+        {% for ins in inscripciones %}
+        <div class="col-md-4">
+            <div class="card border-primary mb-3">
+                <div class="card-header">Desde: {{ ins.fecha_inicio|date:"d M Y" }}</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ ins.programa.nombre }}</h5>
+                    <p class="card-text">Estado: {% if ins.completado %} ✅ Completado {% else %} 📖 En curso {% endif %}</p>
+                    <a href="{% url 'curso_detalle' ins.programa.id %}" class="btn btn-outline-primary">Continuar</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>No estás inscrito en ningún curso aún. <a href="/">¡Explora el catálogo!</a></p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

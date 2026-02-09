@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-7">
+            <h2 class="fw-bold mb-4">{{ leccion.titulo }}</h2>
+            <div class="card shadow-sm p-4 mb-4 bg-white rounded">
+                {{ leccion.contenido_teorico|linebreaks }}
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="sticky-top" style="top: 20px;">
+                <h4 class="mb-3"><i class="bi bi-code-slash"></i> Practica</h4>
+                <div class="card shadow-sm border-0">
+                    <div id="editor" style="height: 300px; width: 100%; font-size: 14px;"># Escribe aquí tu respuesta...</div>
+                    <div class="card-footer bg-white p-3">
+                        <button id="btn-validar" class="btn btn-success w-100 fw-bold">
+                            Ejecutar y Validar
+                        </button>
+                        <div id="resultado" class="mt-3 p-3 rounded d-none"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.4/ace.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/python");
+
+    document.getElementById('btn-validar').onclick = function() {
+        const codigo = editor.getValue();
+        const resDiv = document.getElementById('resultado');
+        
+        resDiv.classList.remove('d-none', 'alert-success', 'alert-danger');
+        resDiv.innerHTML = 'Procesando...';
+        
+        fetch("{% url 'cursos:validar_ejercicio' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ "codigo": codigo, "leccion_id": "{{ leccion.id }}" })
+        })
+        .then(response => response.json())
+        .then(data => {
+            resDiv.classList.add('alert', data.correcto ? 'alert-success' : 'alert-danger');
+            resDiv.innerHTML = data.mensaje;
+            if (data.correcto) {
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+        });
+    };
+</script>
+{% endblock %}

@@ -24,7 +24,7 @@
             <h3>Secuencia Didáctica</h3>
             <div class="list-group mt-3">
                 {% for leccion in lecciones %}
-                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                    <a href="{% url "cursos:leccion_detalle" leccion.id %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                         <div>
                             <strong>{{ leccion.orden }}.</strong> {{ leccion.titulo }}
                         </div>

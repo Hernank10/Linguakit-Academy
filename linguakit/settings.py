@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'apps.usuarios',
     'apps.core',
     'apps.cursos',
+    'apps.contenidos',
     'apps.ejercicios',
     'apps.consejos',
     'apps.api',
