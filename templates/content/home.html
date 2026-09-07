@@ -1,0 +1,75 @@
+{% extends 'base/_base.html' %}
+{% load static %}
+
+{% block title %}Linguakit Academy - Inicio{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12 text-center py-5 bg-primary text-white rounded">
+            <h1 class="display-4">📚 Linguakit Academy</h1>
+            <p class="lead">Biblioteca de Técnicas Lingüísticas del Castellano</p>
+            <p class="lead">
+                <span class="badge bg-light text-dark me-2">{{ total_tecnicas }} técnicas</span>
+                <span class="badge bg-light text-dark">{{ total_categorias }} categorías</span>
+            </p>
+            <a href="{% url 'content:index' %}" class="btn btn-light btn-lg mt-3">
+                <i class="fas fa-book-open"></i> Explorar Biblioteca
+            </a>
+        </div>
+    </div>
+
+    {% if categorias_populares %}
+    <div class="row mt-4">
+        <div class="col-12"><h3 class="text-center mb-4">📂 Categorías más populares</h3></div>
+        {% for cat in categorias_populares %}
+        <div class="col-md-4 col-lg-2 mb-3">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <i class="fas fa-folder-open fa-2x text-primary mb-2"></i>
+                    <h6 class="card-title">{{ cat.category|default:"Sin categoría"|truncatechars:15 }}</h6>
+                    <span class="badge bg-primary">{{ cat.count }} técnicas</span>
+                    <br>
+                    <a href="{% url 'content:por_categoria' cat.category %}" class="btn btn-sm btn-outline-primary mt-2">Ver más</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="row mt-4">
+        <div class="col-12"><h3 class="text-center mb-4">🆕 Últimas técnicas agregadas</h3></div>
+        {% for tecnica in ultimas %}
+        <div class="col-md-4 col-lg-4 mb-3">
+            <div class="card h-100 card-hover">
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{% url 'content:detalle' tecnica.id %}" class="text-decoration-none">{{ tecnica.title|truncatechars:50 }}</a></h5>
+                    <div class="mb-2">
+                        {% if tecnica.category %}<span class="badge bg-primary">{{ tecnica.category }}</span>{% endif %}
+                        {% if tecnica.level %}<span class="badge bg-success">Nivel {{ tecnica.level }}</span>{% endif %}
+                    </div>
+                    {% if tecnica.theory %}<p class="card-text text-muted small">{{ tecnica.theory|truncatechars:80 }}</p>{% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="row mt-4 mb-5">
+        <div class="col-12 text-center">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h4>¿Buscas algo específico?</h4>
+                    <form method="get" action="{% url 'content:buscar' %}" class="d-flex justify-content-center">
+                        <div class="input-group w-50">
+                            <input type="text" name="q" class="form-control" placeholder="Buscar técnicas...">
+                            <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i> Buscar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

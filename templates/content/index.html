@@ -1,0 +1,104 @@
+{% extends 'base/_base.html' %}
+{% load static %}
+
+{% block title %}Biblioteca de Técnicas{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white"><h5><i class="fas fa-cubes"></i> Categorías</h5></div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        {% for cat in categorias %}
+                        <li class="mb-2">
+                            <a href="{% url 'content:por_categoria' cat.category %}" class="text-decoration-none">
+                                <i class="fas fa-folder"></i> {{ cat.category|default:"Sin categoría" }}
+                                <span class="badge bg-secondary float-end">{{ cat.count }}</span>
+                            </a>
+                        </li>
+                        {% empty %}<li class="text-muted">No hay categorías</li>{% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white"><h5><i class="fas fa-graduation-cap"></i> Niveles</h5></div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        {% for nivel in niveles %}
+                        {% if nivel.level %}
+                        <li class="mb-2">
+                            <a href="{% url 'content:por_nivel' nivel.level %}" class="text-decoration-none">
+                                <i class="fas fa-level-up"></i> Nivel {{ nivel.level }}
+                                <span class="badge bg-secondary float-end">{{ nivel.count }}</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header bg-info text-white"><h5><i class="fas fa-clock"></i> Últimas</h5></div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        {% for t in ultimas %}
+                        <li class="mb-2"><a href="{% url 'content:detalle' t.id %}" class="text-decoration-none">{{ t.title|truncatechars:40 }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4><i class="fas fa-book"></i> Biblioteca</h4>
+                        <span class="badge bg-primary">Total: {{ total }}</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form method="get" action="{% url 'content:buscar' %}" class="mb-4">
+                        <div class="input-group">
+                            <input type="text" name="q" class="form-control" placeholder="Buscar...">
+                            <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i> Buscar</button>
+                        </div>
+                    </form>
+                    <div class="row">
+                        {% for tecnica in page_obj %}
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100 card-hover">
+                                <div class="card-body">
+                                    <h5 class="card-title"><a href="{% url 'content:detalle' tecnica.id %}" class="text-decoration-none">{{ tecnica.title|truncatechars:60 }}</a></h5>
+                                    <div class="mb-2">
+                                        {% if tecnica.category %}<span class="badge bg-primary">{{ tecnica.category }}</span>{% endif %}
+                                        {% if tecnica.level %}<span class="badge bg-success">Nivel {{ tecnica.level }}</span>{% endif %}
+                                        {% if tecnica.grade %}<span class="badge bg-info">{{ tecnica.grade }}</span>{% endif %}
+                                    </div>
+                                    {% if tecnica.theory %}<p class="card-text text-muted small">{{ tecnica.theory|truncatechars:120 }}</p>{% endif %}
+                                    <small class="text-muted"><i class="fas fa-star"></i> {{ tecnica.points|default:10 }} pts</small>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col-12"><div class="alert alert-info">No hay técnicas disponibles.</div></div>
+                        {% endfor %}
+                    </div>
+
+                    {% if page_obj.has_other_pages %}
+                    <nav><ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a></li>{% endif %}
+                        {% for num in page_obj.paginator.page_range %}
+                        <li class="page-item {% if page_obj.number == num %}active{% endif %}"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                        {% endfor %}
+                        {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a></li>{% endif %}
+                    </ul></nav>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

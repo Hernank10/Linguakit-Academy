@@ -1,0 +1,40 @@
+{% extends 'base/_base.html' %}
+{% block title %}{{ tecnica.title }}{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <nav aria-label="breadcrumb"><ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'content:index' %}">Inicio</a></li>
+                {% if tecnica.category %}<li class="breadcrumb-item"><a href="{% url 'content:por_categoria' tecnica.category %}">{{ tecnica.category }}</a></li>{% endif %}
+                <li class="breadcrumb-item active">{{ tecnica.title|truncatechars:40 }}</li>
+            </ol></nav>
+            <div class="card">
+                <div class="card-header"><h3>{{ tecnica.title }}</h3>
+                    <div>
+                        {% if tecnica.category %}<span class="badge bg-primary">{{ tecnica.category }}</span>{% endif %}
+                        {% if tecnica.level %}<span class="badge bg-success">Nivel {{ tecnica.level }}</span>{% endif %}
+                        {% if tecnica.grade %}<span class="badge bg-info">{{ tecnica.grade }}</span>{% endif %}
+                        {% if tecnica.technique_type %}<span class="badge bg-secondary">{{ tecnica.technique_type }}</span>{% endif %}
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if tecnica.theory %}<div class="mb-4"><h5><i class="fas fa-book"></i> Teoría</h5><div class="p-3 bg-light rounded">{{ tecnica.theory|linebreaks }}</div></div>{% endif %}
+                    {% if tecnica.example %}<div class="mb-4"><h5><i class="fas fa-lightbulb"></i> Ejemplo</h5><div class="p-3 bg-warning bg-opacity-10 rounded">{{ tecnica.example|linebreaks }}</div></div>{% endif %}
+                    {% if tecnica.exercise_text %}<div class="mb-4"><h5><i class="fas fa-pencil-alt"></i> Ejercicio</h5><div class="p-3 bg-info bg-opacity-10 rounded">{{ tecnica.exercise_text|linebreaks }}</div></div>{% endif %}
+                    {% if tecnica.correct_answer %}<div class="mb-4"><h5><i class="fas fa-check-circle"></i> Respuesta correcta</h5><div class="p-3 bg-success bg-opacity-10 rounded">{{ tecnica.correct_answer|linebreaks }}</div></div>{% endif %}
+                    <div class="mt-4 text-muted small"><i class="fas fa-star"></i> {{ tecnica.points|default:10 }} pts {% if tecnica.difficulty %}| <i class="fas fa-signal"></i> Dificultad: {{ tecnica.difficulty }}/5{% endif %}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white"><h5><i class="fas fa-link"></i> Relacionadas</h5></div>
+                <div class="card-body">
+                    {% if relacionadas %}<ul class="list-unstyled">{% for t in relacionadas %}<li class="mb-3"><a href="{% url 'content:detalle' t.id %}" class="text-decoration-none">{{ t.title|truncatechars:50 }}</a><br><small class="text-muted">{% if t.level %}Nivel {{ t.level }}{% endif %}{% if t.category %} - {{ t.category }}{% endif %}</small></li>{% endfor %}</ul>{% else %}<p class="text-muted">No hay técnicas relacionadas.</p>{% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

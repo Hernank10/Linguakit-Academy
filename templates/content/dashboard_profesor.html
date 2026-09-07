@@ -1,0 +1,77 @@
+{% extends 'base/_base.html' %}
+{% load static %}
+
+{% block title %}Dashboard Profesor - Linguakit Academy{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5><i class="fas fa-chalkboard-teacher"></i> Profesor</h5>
+                </div>
+                <div class="card-body text-center">
+                    <i class="fas fa-user-tie" style="font-size: 4rem;"></i>
+                    <h5>{{ user.username }}</h5>
+                    <p class="text-muted">Administrador</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header">
+                    <h4><i class="fas fa-chart-bar"></i> Estadísticas de Contenido</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body text-center">
+                                    <h2>{{ total_tecnicas }}</h2>
+                                    <p>Total de técnicas</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-success text-white">
+                                <div class="card-body text-center">
+                                    <h2>{{ categorias_stats|length }}</h2>
+                                    <p>Categorías</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h5>Categorías</h5>
+                            <ul class="list-group">
+                                {% for cat in categorias_stats %}
+                                <li class="list-group-item d-flex justify-content-between">
+                                    {{ cat.category|default:"Sin categoría" }}
+                                    <span class="badge bg-primary">{{ cat.count }}</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Niveles</h5>
+                            <ul class="list-group">
+                                {% for nivel in niveles_stats %}
+                                {% if nivel.level %}
+                                <li class="list-group-item d-flex justify-content-between">
+                                    Nivel {{ nivel.level }}
+                                    <span class="badge bg-success">{{ nivel.count }}</span>
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
