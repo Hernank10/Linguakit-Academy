@@ -63,3 +63,22 @@ DATABASES = {
 AUTH_USER_MODEL = 'usuarios.Usuario'
 STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Apps instaladas
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    # Apps del proyecto
+    'apps.core',
+    'apps.cursos',
+    'apps.ejercicios',
+    'apps.contenidos',
+    'apps.consejos',
+    'apps.usuarios',
+    'apps.api',
+    'apps.content',  # 👈 AÑADIR ESTA LÍNEA
+]
