@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Índice de Técnicas Lingüísticas</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .categoria { background: #f0f0f0; padding: 10px; margin: 10px 0; }
+        .tecnica { margin-left: 20px; padding: 5px; border-bottom: 1px solid #eee; }
+    </style>
+</head>
+<body>
+    <h1>📚 Índice de Técnicas Lingüísticas</h1>
+    <p>Total: {{ total }} técnicas</p>
+    
+    {% for categoria, tecnicas in categorias.items %}
+    <div class="categoria">
+        <h2>{{ categoria|default:"Sin categoría" }}</h2>
+        <p>{{ tecnicas|length }} técnicas</p>
+        {% for t in tecnicas %}
+        <div class="tecnica">
+            <strong>{{ t.title }}</strong>
+            {% if t.level %} - Nivel: {{ t.level }}{% endif %}
+            {% if t.grade %} - Grado: {{ t.grade }}{% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</body>
+</html>

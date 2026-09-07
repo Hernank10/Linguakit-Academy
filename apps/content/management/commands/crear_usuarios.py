@@ -1,9 +1,12 @@
 import random
 from django.core.management.base import BaseCommand
-from django.contrib.auth.models import User, Group, Permission
+from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.db import transaction
 from django.utils import timezone
+
+# Importar modelo de usuario personalizado
+from apps.usuarios.models import Usuario
 
 try:
     from apps.cursos.models import Curso, Inscripcion
@@ -12,7 +15,7 @@ except ImportError:
     CURSOS_EXISTEN = False
 
 class Command(BaseCommand):
-    help = 'Crea usuarios con roles (admin, profesor, estudiante)'
+    help = 'Crea usuarios con roles (admin, profesor, estudiante) usando modelo personalizado'
 
     def add_arguments(self, parser):
         parser.add_argument('--num-estudiantes', type=int, default=10)
@@ -28,7 +31,7 @@ class Command(BaseCommand):
         clear = options['clear']
 
         if clear:
-            User.objects.filter(is_superuser=False).delete()
+            Usuario.objects.filter(is_superuser=False).delete()
             self.stdout.write('🗑️ Usuarios eliminados')
 
         self._crear_grupos()
@@ -53,16 +56,16 @@ class Command(BaseCommand):
                     grupo.permissions.add(perm)
 
     def _crear_admin(self, password):
-        if not User.objects.filter(is_superuser=True).exists():
-            User.objects.create_superuser('admin', 'admin@linguakit.com', password)
+        if not Usuario.objects.filter(is_superuser=True).exists():
+            Usuario.objects.create_superuser('admin', 'admin@linguakit.com', password)
             self.stdout.write('✅ Admin creado')
 
     def _crear_profesores(self, cantidad, password):
         profesores = []
         for i in range(1, cantidad + 1):
             username = f'profesor{i}'
-            if not User.objects.filter(username=username).exists():
-                user = User.objects.create_user(username, f'{username}@linguakit.com', password)
+            if not Usuario.objects.filter(username=username).exists():
+                user = Usuario.objects.create_user(username, f'{username}@linguakit.com', password)
                 user.is_staff = True
                 user.save()
                 user.groups.add(Group.objects.get(name='Profesores'))
@@ -73,16 +76,16 @@ class Command(BaseCommand):
         estudiantes = []
         for i in range(1, cantidad + 1):
             username = f'estudiante{i}'
-            if not User.objects.filter(username=username).exists():
-                user = User.objects.create_user(username, f'{username}@linguakit.com', password)
+            if not Usuario.objects.filter(username=username).exists():
+                user = Usuario.objects.create_user(username, f'{username}@linguakit.com', password)
                 user.groups.add(Group.objects.get(name='Estudiantes'))
                 estudiantes.append(user)
         return estudiantes
 
     def _mostrar_resumen(self):
-        total = User.objects.count()
-        admins = User.objects.filter(is_superuser=True).count()
-        staff = User.objects.filter(is_staff=True, is_superuser=False).count()
-        estudiantes = User.objects.filter(is_staff=False, is_superuser=False).count()
+        total = Usuario.objects.count()
+        admins = Usuario.objects.filter(is_superuser=True).count()
+        staff = Usuario.objects.filter(is_staff=True, is_superuser=False).count()
+        estudiantes = Usuario.objects.filter(is_staff=False, is_superuser=False).count()
         self.stdout.write(f'\n📊 Total: {total} | Admins: {admins} | Profesores: {staff} | Estudiantes: {estudiantes}')
         self.stdout.write('🔑 password123 para todos los usuarios')

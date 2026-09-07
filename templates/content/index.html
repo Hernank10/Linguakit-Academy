@@ -44,7 +44,7 @@
                 <div class="card-body">
                     <ul class="list-unstyled">
                         {% for t in ultimas %}
-                        <li class="mb-2"><a href="{% url 'content:detalle' t.id %}" class="text-decoration-none">{{ t.title|truncatechars:40 }}</a></li>
+                        <li class="mb-2"><a href="{% url 'content:detalle_tecnica' t.id %}" class="text-decoration-none">{{ t.title|truncatechars:40 }}</a></li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -71,7 +71,7 @@
                         <div class="col-md-6 mb-3">
                             <div class="card h-100 card-hover">
                                 <div class="card-body">
-                                    <h5 class="card-title"><a href="{% url 'content:detalle' tecnica.id %}" class="text-decoration-none">{{ tecnica.title|truncatechars:60 }}</a></h5>
+                                    <h5 class="card-title"><a href="{% url 'content:detalle_tecnica' tecnica.id %}" class="text-decoration-none">{{ tecnica.title|truncatechars:60 }}</a></h5>
                                     <div class="mb-2">
                                         {% if tecnica.category %}<span class="badge bg-primary">{{ tecnica.category }}</span>{% endif %}
                                         {% if tecnica.level %}<span class="badge bg-success">Nivel {{ tecnica.level }}</span>{% endif %}

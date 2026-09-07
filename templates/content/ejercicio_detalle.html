@@ -1,0 +1,101 @@
+{% extends 'base/_base.html' %}
+{% load static %}
+
+{% block title %}{{ ejercicio.titulo }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'content:listar_cursos' %}">Cursos</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'content:detalle_curso' ejercicio.leccion.curso.id %}">{{ ejercicio.leccion.curso.titulo|truncatechars:30 }}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'content:detalle_leccion' ejercicio.leccion.id %}">{{ ejercicio.leccion.titulo|truncatechars:30 }}</a></li>
+            <li class="breadcrumb-item active">Ejercicio</li>
+        </ol>
+    </nav>
+
+    <div class="card">
+        <div class="card-header bg-warning text-dark">
+            <h3>{{ ejercicio.titulo }}</h3>
+            <span class="badge bg-dark">{{ ejercicio.puntos }} puntos</span>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-info">
+                <h5><i class="fas fa-question-circle"></i> Pregunta</h5>
+                <p>{{ ejercicio.pregunta|linebreaks }}</p>
+            </div>
+
+            {% if ejercicio.opciones %}
+            <div class="mt-4">
+                <h5>Selecciona la respuesta correcta:</h5>
+                <form id="ejercicio-form">
+                    <div class="list-group">
+                        {% for opcion in ejercicio.opciones %}
+                        <label class="list-group-item list-group-item-action">
+                            <input type="radio" name="respuesta" value="{{ opcion }}"> 
+                            {{ opcion }}
+                        </label>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="btn btn-success mt-3" id="verificar-respuesta">
+                        <i class="fas fa-check"></i> Verificar
+                    </button>
+                </form>
+                <div id="resultado" class="mt-3" style="display:none;"></div>
+            </div>
+            {% else %}
+            <div class="alert alert-warning">
+                <p><strong>Ejercicio de respuesta abierta:</strong></p>
+                <p>Escribe tu respuesta en el cuadro de texto.</p>
+                <textarea class="form-control" rows="4" placeholder="Escribe tu respuesta aquí..."></textarea>
+                <button class="btn btn-success mt-2">Enviar respuesta</button>
+            </div>
+            {% endif %}
+
+            {% if ejercicio.explicacion %}
+            <div class="mt-4">
+                <div class="alert alert-secondary">
+                    <h5><i class="fas fa-lightbulb"></i> Explicación</h5>
+                    <p>{{ ejercicio.explicacion|linebreaks }}</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="mt-3">
+                <a href="{% url 'content:detalle_leccion' ejercicio.leccion.id %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver a la lección
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const verificarBtn = document.getElementById('verificar-respuesta');
+    if (verificarBtn) {
+        verificarBtn.addEventListener('click', function() {
+            const selected = document.querySelector('input[name="respuesta"]:checked');
+            const resultado = document.getElementById('resultado');
+            if (!selected) {
+                resultado.style.display = 'block';
+                resultado.className = 'alert alert-warning mt-3';
+                resultado.innerHTML = 'Por favor selecciona una opción.';
+                return;
+            }
+            const respuesta = selected.value;
+            const correcta = "{{ ejercicio.respuesta_correcta }}";
+            if (respuesta === correcta) {
+                resultado.style.display = 'block';
+                resultado.className = 'alert alert-success mt-3';
+                resultado.innerHTML = '✅ ¡Correcto! Has respondido bien.';
+            } else {
+                resultado.style.display = 'block';
+                resultado.className = 'alert alert-danger mt-3';
+                resultado.innerHTML = '❌ Incorrecto. La respuesta correcta es: <strong>' + correcta + '</strong>';
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

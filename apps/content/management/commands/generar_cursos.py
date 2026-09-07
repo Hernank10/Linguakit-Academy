@@ -2,62 +2,13 @@ import random
 import re
 from django.core.management.base import BaseCommand
 from django.db import transaction
-from django.utils.text import slugify
-from apps.content.models import LinguisticTechnique
-
-# Intentar usar modelos existentes, si no, crear temporales
-try:
-    from apps.cursos.models import Curso, Leccion
-    CURSOS_EXISTEN = True
-except ImportError:
-    CURSOS_EXISTEN = False
-    from django.db import models
-    class Curso(models.Model):
-        titulo = models.CharField(max_length=200)
-        descripcion = models.TextField(blank=True)
-        categoria = models.CharField(max_length=100, blank=True)
-        nivel = models.CharField(max_length=10, blank=True)
-        created_at = models.DateTimeField(auto_now_add=True)
-        class Meta:
-            app_label = 'content'
-    class Leccion(models.Model):
-        curso = models.ForeignKey(Curso, on_delete=models.CASCADE, related_name='lecciones')
-        titulo = models.CharField(max_length=200)
-        descripcion = models.TextField(blank=True)
-        orden = models.IntegerField(default=0)
-        class Meta:
-            app_label = 'content'
-
-try:
-    from apps.ejercicios.models import Ejercicio, Evaluacion
-    EJERCICIOS_EXISTEN = True
-except ImportError:
-    EJERCICIOS_EXISTEN = False
-    from django.db import models
-    class Ejercicio(models.Model):
-        leccion = models.ForeignKey(Leccion, on_delete=models.CASCADE, related_name='ejercicios')
-        titulo = models.CharField(max_length=200)
-        pregunta = models.TextField()
-        opciones = models.JSONField(default=list)
-        respuesta_correcta = models.TextField()
-        explicacion = models.TextField(blank=True)
-        puntos = models.IntegerField(default=10)
-        class Meta:
-            app_label = 'content'
-    class Evaluacion(models.Model):
-        curso = models.ForeignKey(Curso, on_delete=models.CASCADE, related_name='evaluaciones')
-        titulo = models.CharField(max_length=200)
-        descripcion = models.TextField(blank=True)
-        preguntas = models.JSONField(default=list)
-        puntaje_total = models.IntegerField(default=100)
-        class Meta:
-            app_label = 'content'
+from apps.content.models import LinguisticTechnique, Curso, Leccion, Ejercicio, Evaluacion
 
 class Command(BaseCommand):
     help = 'Genera cursos, lecciones, prácticas y evaluaciones a partir de técnicas'
 
     def add_arguments(self, parser):
-        parser.add_argument('--num-cursos', type=int, default=50)
+        parser.add_argument('--num-cursos', type=int, default=10)
         parser.add_argument('--tecnicas-por-leccion', type=int, default=5)
 
     @transaction.atomic

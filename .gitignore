@@ -14,3 +14,6 @@ static_root/
 .vscode/
 .idea/
 .DS_Store
+apps/api/ejercicios_completos-lengua-castellana/tails-amd64-7.8.1.img
+apps/api/ejercicios_completos-lengua-castellana/*.img
+apps/api/ejercicios_completos-lengua-castellana/*.img

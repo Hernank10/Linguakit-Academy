@@ -1,0 +1,14 @@
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.logro-notificacion {
+    animation: slideIn 0.5s ease;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+}
+.logro-notificacion .logro-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}

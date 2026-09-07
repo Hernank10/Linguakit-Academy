@@ -12,7 +12,7 @@
                 </div>
             </form>
             {% if query %}<p>Mostrando {{ total }} resultados para "{{ query }}"</p>
-            <div class="row">{% for tecnica in resultados %}<div class="col-md-6 mb-3"><div class="card h-100"><div class="card-body"><h5 class="card-title"><a href="{% url 'content:detalle' tecnica.id %}" class="text-decoration-none">{{ tecnica.title|truncatechars:60 }}</a></h5><div>{% if tecnica.category %}<span class="badge bg-primary">{{ tecnica.category }}</span>{% endif %}{% if tecnica.level %}<span class="badge bg-success">Nivel {{ tecnica.level }}</span>{% endif %}</div>{% if tecnica.theory %}<p class="text-muted small">{{ tecnica.theory|truncatechars:120 }}</p>{% endif %}</div></div></div>{% empty %}<div class="col-12"><div class="alert alert-info">No se encontraron resultados.</div></div>{% endfor %}</div>
+            <div class="row">{% for tecnica in resultados %}<div class="col-md-6 mb-3"><div class="card h-100"><div class="card-body"><h5 class="card-title"><a href="{% url 'content:detalle_tecnica' tecnica.id %}" class="text-decoration-none">{{ tecnica.title|truncatechars:60 }}</a></h5><div>{% if tecnica.category %}<span class="badge bg-primary">{{ tecnica.category }}</span>{% endif %}{% if tecnica.level %}<span class="badge bg-success">Nivel {{ tecnica.level }}</span>{% endif %}</div>{% if tecnica.theory %}<p class="text-muted small">{{ tecnica.theory|truncatechars:120 }}</p>{% endif %}</div></div></div>{% empty %}<div class="col-12"><div class="alert alert-info">No se encontraron resultados.</div></div>{% endfor %}</div>
             {% else %}<div class="alert alert-info">Ingresa un término de búsqueda.</div>{% endif %}
         </div>
     </div>

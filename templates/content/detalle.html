@@ -31,7 +31,7 @@
             <div class="card">
                 <div class="card-header bg-primary text-white"><h5><i class="fas fa-link"></i> Relacionadas</h5></div>
                 <div class="card-body">
-                    {% if relacionadas %}<ul class="list-unstyled">{% for t in relacionadas %}<li class="mb-3"><a href="{% url 'content:detalle' t.id %}" class="text-decoration-none">{{ t.title|truncatechars:50 }}</a><br><small class="text-muted">{% if t.level %}Nivel {{ t.level }}{% endif %}{% if t.category %} - {{ t.category }}{% endif %}</small></li>{% endfor %}</ul>{% else %}<p class="text-muted">No hay técnicas relacionadas.</p>{% endif %}
+                    {% if relacionadas %}<ul class="list-unstyled">{% for t in relacionadas %}<li class="mb-3"><a href="{% url 'content:detalle_tecnica' t.id %}" class="text-decoration-none">{{ t.title|truncatechars:50 }}</a><br><small class="text-muted">{% if t.level %}Nivel {{ t.level }}{% endif %}{% if t.category %} - {{ t.category }}{% endif %}</small></li>{% endfor %}</ul>{% else %}<p class="text-muted">No hay técnicas relacionadas.</p>{% endif %}
                 </div>
             </div>
         </div>

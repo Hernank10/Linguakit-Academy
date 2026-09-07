@@ -1,0 +1,58 @@
+{% extends 'base/_base.html' %}
+{% load static %}
+
+{% block title %}{{ curso.titulo }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'content:listar_cursos' %}">Cursos</a></li>
+            <li class="breadcrumb-item active">{{ curso.titulo|truncatechars:40 }}</li>
+        </ol>
+    </nav>
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2>{{ curso.titulo }}</h2>
+            <div>
+                <span class="badge bg-light text-dark">{{ curso.categoria|default:"General" }}</span>
+                {% if curso.nivel %}<span class="badge bg-success">Nivel {{ curso.nivel }}</span>{% endif %}
+                <span class="badge bg-info">{{ curso.lecciones.count }} lecciones</span>
+            </div>
+        </div>
+        <div class="card-body">
+            <p class="lead">{{ curso.descripcion }}</p>
+            
+            <h4 class="mt-4">📖 Lecciones</h4>
+            <div class="list-group">
+                {% for leccion in lecciones %}
+                <a href="{% url 'content:detalle_leccion' leccion.id %}" class="list-group-item list-group-item-action">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>{{ leccion.titulo }}</strong>
+                            <br>
+                            <small class="text-muted">{{ leccion.descripcion|truncatechars:100 }}</small>
+                        </div>
+                        <span class="badge bg-primary rounded-pill">{{ leccion.ejercicios.count }} ejercicios</span>
+                    </div>
+                </a>
+                {% empty %}
+                <div class="alert alert-info">No hay lecciones en este curso.</div>
+                {% endfor %}
+            </div>
+
+            {% if evaluacion %}
+            <div class="mt-4">
+                <div class="alert alert-success">
+                    <h5><i class="fas fa-check-circle"></i> Evaluación disponible</h5>
+                    <p>{{ evaluacion.descripcion }}</p>
+                    <p><strong>Puntaje total:</strong> {{ evaluacion.puntaje_total }} puntos</p>
+                    <a href="#" class="btn btn-success">Iniciar evaluación</a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

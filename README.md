@@ -41,7 +41,7 @@ Si deseas clonar este proyecto y ejecutarlo localmente:
 4. **Ejecutar migraciones y servidor:**
    ```bash
    python manage.py migrate
-   python manage.py runserver
+   
    ```
 
 ## 📂 Estructura del Proyecto

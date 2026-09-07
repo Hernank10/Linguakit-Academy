@@ -1,0 +1,47 @@
+{% extends 'base/_base.html' %}
+{% load static %}
+
+{% block title %}{{ leccion.titulo }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'content:listar_cursos' %}">Cursos</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'content:detalle_curso' leccion.curso.id %}">{{ leccion.curso.titulo|truncatechars:30 }}</a></li>
+            <li class="breadcrumb-item active">{{ leccion.titulo|truncatechars:30 }}</li>
+        </ol>
+    </nav>
+
+    <div class="card">
+        <div class="card-header bg-success text-white">
+            <h3>{{ leccion.titulo }}</h3>
+        </div>
+        <div class="card-body">
+            <p>{{ leccion.descripcion }}</p>
+            
+            <h4 class="mt-4">📝 Ejercicios de práctica</h4>
+            <div class="row">
+                {% for ejercicio in ejercicios %}
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ ejercicio.titulo }}</h5>
+                            <p class="card-text text-muted small">{{ ejercicio.pregunta|truncatechars:100 }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-warning text-dark">{{ ejercicio.puntos }} puntos</span>
+                                <a href="{% url 'content:detalle_ejercicio' ejercicio.id %}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-play"></i> Practicar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12"><div class="alert alert-info">No hay ejercicios en esta lección.</div></div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -12,7 +12,7 @@
                 <div class="col-md-4 mb-3">
                     <div class="card h-100 card-hover">
                         <div class="card-body">
-                            <h5 class="card-title"><a href="{% url 'content:detalle' tecnica.id %}" class="text-decoration-none">{{ tecnica.title|truncatechars:50 }}</a></h5>
+                            <h5 class="card-title"><a href="{% url 'content:detalle_tecnica' tecnica.id %}" class="text-decoration-none">{{ tecnica.title|truncatechars:50 }}</a></h5>
                             <div>{% if tecnica.category %}<span class="badge bg-primary">{{ tecnica.category }}</span>{% endif %}{% if tecnica.level %}<span class="badge bg-success">Nivel {{ tecnica.level }}</span>{% endif %}</div>
                             {% if tecnica.theory %}<p class="text-muted small">{{ tecnica.theory|truncatechars:80 }}</p>{% endif %}
                         </div>
